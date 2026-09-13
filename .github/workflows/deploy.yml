@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Replace with your default branch name if different
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24  # Updated to use Node.js version 24
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Clean cache and build
+        run: |
+          npm run clean || true
+          rm -rf .next out node_modules/.cache
+          npm run build
+          echo "Build completed successfully"
+          ls -la ./out
+
+      - name: Debug artifact path
+        run: ls -la ./out
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: pages-artifact
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: pages-artifact
