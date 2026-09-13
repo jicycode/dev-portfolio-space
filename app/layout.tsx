@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <nav className="border-b-2 shadow-sm" style={{ backgroundColor: '#ffffff', borderBottomColor: '#777c49' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div className="text-2xl font-bold" style={{ color: '#3a110d' }}>
-              Portafolio DevSecOps
+              Portafolio
             </div>
             <div className="space-x-6 text-sm">
               <a href="#inicio" className="transition" style={{ color: '#666' }}>Inicio</a>
